@@ -5,10 +5,19 @@ pub fn exe(max:u32)->(u32) {
 }
 
 fn fib(i:u32)->(u32){
+    // bench: 119,916ns/iter (+/- 5,345)
     match i {
         1|2=>1,
-        _ =>fib(i-1)+fib(i-2)
+        3=>2,
+        _ =>2*fib(i-2)+fib(i-3)
     }
+
+    // bench: 32,241,114 ns/iter (+/- 1,004,246)
+    // match i {
+    //     1|2=>1,
+    //     _ =>fib(i-1)+fib(i-2)
+    // }
+
 }
 
 #[cfg(test)]

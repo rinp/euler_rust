@@ -1,4 +1,5 @@
 #![feature(test)]
+pub mod prob5;
 pub mod prob4;
 pub mod prob3;
 pub mod prob1;

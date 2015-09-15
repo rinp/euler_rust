@@ -1,11 +1,13 @@
 extern crate test;
-use std::cmp::min;
+use std::cmp::*;
 pub fn exe(max:u32)->u32{
     (2..max+1).rev().fold(1,|sum,x|sum*x/greatest_common_divisor(sum,x))
 }
 
 fn greatest_common_divisor(a:u32,b:u32)->u32{
-    (2..min(a,b)+1).rev().filter(|x|b%x==0&&a%x==0).take(1).next().unwrap_or(1)
+    let big = max(a,b);
+    let small = min(a,b);
+    if small ==0 {big} else {greatest_common_divisor(small,big%small)}
 }
 
 #[cfg(test)]

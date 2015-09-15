@@ -1,18 +1,12 @@
 extern crate test;
-use std::thread;
 
 pub fn exe()->u32{
-    (100..1000).filter_map(|a|
-         thread::spawn(move || {
-            (100..1000).map(|b|b*a).filter(|&x|is_palindrome(x)).max()
-        }).join().ok().unwrap()
-    ).max().unwrap()
+    (100..1000).filter_map(|x| (x..1000).map(|y|x*y).filter(|&x|is_palindrome(x)).max()).max().unwrap()
 }
 
 fn is_palindrome(num:u32)->bool{
-    let s = num.to_string();
-    let len = s.len();
-    (0..len/2).all(|i|s.char_at(len-i-1) == s.char_at(i))
+    let str = num.to_string();
+    str.chars().zip(str.chars().rev()).all(|(a,b)|a==b)
 }
 
 #[cfg(test)]

@@ -1,7 +1,26 @@
 extern crate test;
 
+// 全部繋げるならこれだが
+// pub fn exe()->u32{
+//     (100..1000).filter_map(|x| (x..1000).rev().map(|y|x*y).filter(|&x|is_palindrome(x)).take(1).next()).max().unwrap()
+// }
+
 pub fn exe()->u32{
-    (100..1000).filter_map(|x| (x..1000).map(|y|x*y).filter(|&x|is_palindrome(x)).max()).max().unwrap()
+    let mut palindrome = 0;
+    for x in (100..1000).rev() {
+        for y in (x..1000).rev(){
+            let z = x*y;
+
+            // ここで大幅に処理量を減らすことができる。
+            if z <= palindrome {
+                break;
+            }
+            if is_palindrome(z) {
+                palindrome = z;
+            }
+        }
+    }
+    palindrome
 }
 
 fn is_palindrome(num:u32)->bool{
@@ -26,16 +45,16 @@ mod tests{
         assert_eq!(super::is_palindrome(1234321),true);
     }
 
-    #[test]
-    fn test_exe(){
-        assert_eq!(super::exe(),906609);
-    }
 
     #[bench]
     fn bench_is_palindrome(b: &mut Bencher) {
         b.iter(||super::is_palindrome(123454321));
     }
 
+    #[test]
+    fn test_exe(){
+        assert_eq!(super::exe(),906609);
+    }
     #[bench]
     fn bench_exe(b: &mut Bencher) {
         b.iter(||super::exe());

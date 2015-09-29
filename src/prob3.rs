@@ -1,22 +1,22 @@
-extern crate test;
-pub fn exe(x:u64)->u64{
+pub fn exe(x:u64)->u32{
     search_largest_prime(2,x)
 }
 
-fn search_largest_prime(x:u64,y:u64)->(u64){
+fn search_largest_prime(x:u64,y:u64)->(u32){
     if x>=y{
-        return x;
+        x as u32
     }else if y%x==0 {
-        return search_largest_prime(x,y/x);
+        search_largest_prime(x,y/x)
     }else {
-        return search_largest_prime(x+1,y);
+        search_largest_prime(x+1,y)
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use answer;
     use super::*;
-    use super::test::Bencher;
+    use test::Bencher;
 
     #[test]
     fn test_divide(){
@@ -28,7 +28,7 @@ mod tests {
     }
     #[test]
     fn test_exe() {
-        assert_eq!(6857, exe(600_851_475_143));
+        assert_eq!(answer::ANSWER_3, exe(600_851_475_143));
     }
 
     #[bench]

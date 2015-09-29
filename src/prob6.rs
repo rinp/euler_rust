@@ -1,5 +1,3 @@
-extern crate test;
-
 pub fn exe(max:u64)->u64{
     let a = (1..max+1).fold(0,|sum,x|sum+x);
     a*a-(1..max+1).map(|x|x*x).fold(0,|sum,x|sum+x)
@@ -7,7 +5,8 @@ pub fn exe(max:u64)->u64{
 
 #[cfg(test)]
 mod tests{
-    use super::test::Bencher;
+    use test::Bencher;
+    use answer;
 
     #[test]
     fn test_exe(){
@@ -16,7 +15,7 @@ mod tests{
 
     #[test]
     fn test_exe2(){
-        assert_eq!(super::exe(100),25164150);
+        assert_eq!(super::exe(100),answer::ANSWER_6);
     }
 
     #[bench]

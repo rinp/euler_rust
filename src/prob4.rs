@@ -1,5 +1,3 @@
-extern crate test;
-
 // 全部繋げるならこれだが
 // pub fn exe()->u32{
 //     (100..1000).filter_map(|x| (x..1000).rev().map(|y|x*y).filter(|&x|is_palindrome(x)).take(1).next()).max().unwrap()
@@ -30,7 +28,8 @@ fn is_palindrome(num:u32)->bool{
 
 #[cfg(test)]
 mod tests{
-    use super::test::Bencher;
+    use test::Bencher;
+    use answer;
 
     #[test]
     fn test_is_palindrome1(){
@@ -53,7 +52,7 @@ mod tests{
 
     #[test]
     fn test_exe(){
-        assert_eq!(super::exe(),906609);
+        assert_eq!(super::exe(),answer::ANSWER_4);
     }
     #[bench]
     fn bench_exe(b: &mut Bencher) {

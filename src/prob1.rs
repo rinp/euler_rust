@@ -1,6 +1,4 @@
-extern crate test;
-
-pub fn exe(max:u32)->(u32) {
+pub fn exe(max:u32)->u32 {
     (1..).take_while(|&x|x<max).filter(|&x|divide_3_or_5(x)).fold(0, |sum, i| sum + i)
 }
 fn divide_3_or_5(i:u32)->bool{
@@ -13,9 +11,9 @@ fn divide_3_or_5(i:u32)->bool{
 
 #[cfg(test)]
 mod tests {
-
+    use answer;
     use super::*;
-    use prob2::test::Bencher;
+    use test::Bencher;
 
     #[test]
     fn test_divide_3_or_5_in_3() {
@@ -32,11 +30,12 @@ mod tests {
 
     #[test]
     fn test_exe1() {
-        assert_eq!(233168, exe(1_000u32));
+        assert_eq!(exe(1_000u32),answer::ANSWER_1);
     }
+
     #[test]
     fn test_exe2() {
-        assert_eq!(23, exe(10u32));
+        assert_eq!(exe(10u32), 23);
     }
     #[bench]
     fn bench_exe(b: &mut Bencher) {

@@ -2,3 +2,4 @@
 name = "euler_rust"
 version = "0.1.0"
 authors = ["rinp <rinp.mail.mail@gmail.com>"]
+include = ["ref/*"]

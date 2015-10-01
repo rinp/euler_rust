@@ -7,6 +7,6 @@ pub mod prob3;
 pub mod prob1;
 pub mod prob2;
 pub mod prob7;
-pub mod prob501;
+pub mod prob102;
 extern crate test;
 mod answer;

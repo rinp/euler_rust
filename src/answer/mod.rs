@@ -9,3 +9,4 @@ pub static ANSWER_6:u64 = 25164150;
 pub static ANSWER_7:u32 = 104743;
 
 pub static ANSWER_102:u32 = 228;
+pub static ANSWER_201:u32 = 0;

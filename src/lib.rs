@@ -1,13 +1,12 @@
+
 #![feature(test)]
-//#![feature(step_by)]
-pub mod prob6;
-pub mod prob5;
-pub mod prob4;
-pub mod prob3;
-pub mod prob1;
-pub mod prob2;
-pub mod prob7;
-pub mod prob102;
-pub mod prob201;
 extern crate test;
-mod answer;
+
+extern crate rayon;
+
+// #[macro_use]
+// extern crate lazy_static;
+
+pub mod answer;
+pub mod prob001_100;
+pub mod common;

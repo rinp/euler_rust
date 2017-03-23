@@ -1,5 +1,9 @@
 [package]
-name = "euler_rust"
+name = "euler"
 version = "0.1.0"
 authors = ["rinp <rinp.mail.mail@gmail.com>"]
-include = ["ref/*"]
+include = ["data/*"]
+
+[dependencies]
+lazy_static = "0.2"
+rayon = "0.6.0"

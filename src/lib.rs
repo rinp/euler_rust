@@ -4,6 +4,8 @@ extern crate test;
 
 extern crate rayon;
 
+extern crate num;
+
 // #[macro_use]
 // extern crate lazy_static;
 

@@ -45,37 +45,27 @@ pub fn combination_iter<E: Clone + 'static>(vec: Vec<E>,
 }
 
 fn combination_add(length: usize, max: usize) -> Box<Iterator<Item = Vec<usize>>> {
-
     let mut it: Box<Iterator<Item = Vec<usize>>> =
         Box::new((0..length).into_iter().map(|x| vec![x]));
-
-    for i in 0..length {
-        let max_clone = max.clone();
-        let i_clone = i.clone();
-        it = Box::new(it.flat_map(move |x: Vec<usize>| {
-
-            if &i_clone <= x.last().unwrap() || x.len() == max_clone {
-
-                return vec![x].into_iter();
-            }
-
-            let mut v: Vec<Vec<usize>> = Vec::new();
-
-            let mut clone: Vec<usize> = x.iter().cloned().collect();
-            v.push(x);
-            clone.push(i_clone);
-            v.push(clone);
-            return v.into_iter();
-
-        }));
+    for _ in 1..max {
+        it = combination_add_in(length, it);
     }
-
-    return Box::new(it.filter(move |x| {
-        let len = x.len();
-        len.eq(&max)
-    }));
+    it
 }
 
+fn combination_add_in(length: usize,
+                      now: Box<Iterator<Item = Vec<usize>>>)
+                      -> Box<Iterator<Item = Vec<usize>>> {
+    Box::new(now.flat_map(move |v| {
+        (1 + *v.last().unwrap()..length)
+            .into_iter()
+            .map(move |n| {
+                let mut new_vec = v.to_vec();
+                new_vec.push(n);
+                new_vec
+            })
+    }))
+}
 
 #[cfg(test)]
 mod tests {
@@ -123,7 +113,24 @@ mod tests {
     }
 
     #[bench]
-    fn combination_add_bench(b: &mut Bencher) {
-        b.iter(|| super::combination_add(100, 50).last());
+    fn combination_add_4_2(b: &mut Bencher) {
+        b.iter(|| super::combination_add(4, 2).last());
+    }
+    #[bench]
+    fn combination_add_10_2(b: &mut Bencher) {
+        b.iter(|| super::combination_add(10, 2).last());
+    }
+    #[bench]
+    fn combination_add_5_4(b: &mut Bencher) {
+        b.iter(|| super::combination_add(5, 4).last());
+    }
+    #[bench]
+    fn combination_add_10_5(b: &mut Bencher) {
+        b.iter(|| super::combination_add(10, 5).last());
+    }
+
+    #[bench]
+    fn combination_add_c_1_2(b: &mut Bencher) {
+        b.iter(|| super::combination_add(20, 10).last());
     }
 }

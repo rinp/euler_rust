@@ -1,54 +1,48 @@
+extern crate euler;
+use euler::common;
+use std::collections::HashMap;
+use euler::prob501_600::prob501_510::p501;
 fn main() {
+    p501(100);
+}
 
-    for a in 1..101 {
-        for b in 1..101 {
-            match b {
-                _ if a == b => continue,
-                _ => (),
-            }
-            for c in 1..101 {
-                match c {
-                    _ if c == a => continue,
-                    _ if c == b => continue,
-                    _ => (),
-                }
-                for d in 1..101 {
-                    match d {
-                        _ if d == a => continue,
-                        _ if d == b => continue,
-                        _ if d == c => continue,
-                        _ => (),
-                    }
-                    for e in 1..101 {
-                        match e {
-                            _ if e == a => continue,
-                            _ if e == b => continue,
-                            _ if e == c => continue,
-                            _ if e == d => continue,
-                            _ => (),
-                        }
-                        for f in 1..101 {
-                            match f {
-                                _ if f == a => continue,
-                                _ if f == b => continue,
-                                _ if f == c => continue,
-                                _ if f == d => continue,
-                                _ if f == e => continue,
-                                _ => (),
-                            }
+fn p501(i: u64) {
+    let _ = p501::exe(i);
+}
 
-                            let right = a * a + b * b + c * c;
-                            let left = d * d + e * e + f * f;
+fn p201() {
+    let i_vec: Vec<usize> = (1..101).map(|x| x * x).collect();
+    let vec: Vec<(usize, Vec<usize>)> = common::iter::combination_iter(i_vec, 4)
+        .map(|v| {
+            let sum = v.iter().sum();
+            (sum, v)
+        })
+        .collect();
 
-                            if right == left {
-                                println!("{} {} {} = {} {} {}", a, b, c, d, e, f);
-                            }
+    let vec3 = vec.to_vec();
 
-                        }
-                    }
-                }
-            }
+    let it2: Box<Iterator<Item = usize>> = Box::new(vec.iter().clone().map(|t: &(usize, _)| t.0));
+
+    let map = it2.fold(HashMap::new(), |mut map, sum: usize| {
+        if map.contains_key(&sum) {
+            map.insert(sum, false);
+        } else {
+            map.insert(sum, true);
         }
+        map
+
+    });
+
+    let vec2: Vec<(usize, Vec<usize>)> = vec3.into_iter()
+        .filter(move |t| {
+            let sum = t.0;
+            map.get(&sum).unwrap().clone()
+        })
+        .collect();
+
+    for i in vec2.clone() {
+        println!("{:?}", i);
     }
-    println!("何か見つかりましたか？");
+    println!("len = {}", vec2.len());
+
 }

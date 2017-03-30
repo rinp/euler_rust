@@ -1,7 +1,7 @@
 use common::iter;
 pub fn exe(max: usize) -> usize {
 
-    iter::prime_iter().nth(max - 1).unwrap()
+    iter::prime_iter().map(|i| i as usize).nth(max - 1).unwrap()
 
 }
 

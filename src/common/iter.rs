@@ -1,29 +1,29 @@
 use std::collections::HashMap;
 
-pub fn prime_iter() -> Box<Iterator<Item = usize>> {
-    let from_two = (1..)
+pub fn prime_iter() -> Box<Iterator<Item = u64>> {
+    let from_two = (1u64..)
         .into_iter()
         .map(|x| x * 2 + 1)
         .scan(HashMap::new(), |map, i| {
             let not_prime = map.contains_key(&i);
-            let base: usize = if not_prime {
+            let base: u64 = if not_prime {
                 map.remove(&i).unwrap()
             } else {
                 i * 2
             };
 
-            let new_key: usize =
+            let new_key: u64 =
                 (1..).map(|x| x * base + i).filter(|x| !map.contains_key(x)).next().unwrap();
             map.insert(new_key, base);
 
-            let op: Option<usize> = if !not_prime { Some(i) } else { None };
+            let op: Option<u64> = if !not_prime { Some(i) } else { None };
 
             Some(op)
 
         })
         .filter_map(|s| s);
 
-    let it = (2..3).chain(from_two);
+    let it = (2u64..3).chain(from_two);
 
     Box::new(it)
 
@@ -45,26 +45,32 @@ pub fn combination_iter<E: Clone + 'static>(vec: Vec<E>,
 }
 
 fn combination_add(length: usize, max: usize) -> Box<Iterator<Item = Vec<usize>>> {
-    let mut it: Box<Iterator<Item = Vec<usize>>> =
-        Box::new((0..length).into_iter().map(|x| vec![x]));
-    for _ in 1..max {
-        it = combination_add_in(length, it);
-    }
-    it
+    let base_it = (0..length).into_iter().map(|x| vec![x]);
+
+    let it: Box<Iterator<Item = Vec<usize>>> = Box::new(base_it);
+    combination_add_in(length, it, 1, max)
 }
 
 fn combination_add_in(length: usize,
-                      now: Box<Iterator<Item = Vec<usize>>>)
+                      now: Box<Iterator<Item = Vec<usize>>>,
+                      size: usize,
+                      max: usize)
                       -> Box<Iterator<Item = Vec<usize>>> {
-    Box::new(now.flat_map(move |v| {
-        (1 + *v.last().unwrap()..length)
-            .into_iter()
-            .map(move |n| {
-                let mut new_vec = v.to_vec();
-                new_vec.push(n);
-                new_vec
-            })
-    }))
+    if size == max {
+        now
+    } else {
+        let it = now.flat_map(move |v| {
+            (1 + *v.last().unwrap()..length)
+                .into_iter()
+                .map(move |n| {
+                    let mut new_vec = v.to_vec();
+                    new_vec.push(n);
+                    new_vec
+                })
+        });
+        combination_add_in(length, Box::new(it), size + 1, max)
+    }
+
 }
 
 #[cfg(test)]
@@ -130,7 +136,18 @@ mod tests {
     }
 
     #[bench]
-    fn combination_add_c_1_2(b: &mut Bencher) {
+    fn combination_add_c_1_1(b: &mut Bencher) {
         b.iter(|| super::combination_add(20, 10).last());
     }
+
+    #[bench]
+    fn combination_add_c_1_2(b: &mut Bencher) {
+        b.iter(|| super::combination_add(100, 3).last());
+    }
+
+    #[bench]
+    fn combination_add_c_1_3(b: &mut Bencher) {
+        b.iter(|| super::combination_add(100, 50).last());
+    }
+
 }

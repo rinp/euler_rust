@@ -6,5 +6,6 @@ pub static ANSWER_5: usize = 232792560;
 pub static ANSWER_6: usize = 25164150;
 pub static ANSWER_7: usize = 104743;
 
+pub static ANSWER_16: usize = 1366;
 pub static ANSWER_102: usize = 228;
 pub static ANSWER_201: usize = 0;

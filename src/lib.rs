@@ -1,11 +1,12 @@
 
 #![feature(test)]
+#![feature(i128_type)]
+
 extern crate test;
 
 extern crate rayon;
-
 extern crate num;
-
+extern crate time;
 // #[macro_use]
 // extern crate lazy_static;
 

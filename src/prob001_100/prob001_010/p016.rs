@@ -1,15 +1,27 @@
 
 use num::PrimInt;
 
-pub fn exe(power: usize) -> usize {
+pub fn exe(mut power: usize) -> usize {
 
-    let max_digits = max_digits(2, power);
+    let mut base = 2;
+
+    loop {
+        if power % 2 == 0 {
+            base *= base;
+            power /= 2;
+        } else {
+            break;
+        }
+    }
+
+    let max_digits = max_digits(base, power);
     //    println!("最大桁数は:{}", max_digits);
     let mut v: Vec<usize> = vec![0; max_digits];
     v[0] = 1;
-    for _ in 0..power {
+    for i in 0..power {
         for l in (0..max_digits).rev() {
-            let n = v[l] * 2;
+            // println!("{} * {}", v[l], base);
+            let n = v[l] * base;
             if 1000 <= n {
                 v[l + 3] += n / 1000;
                 v[l] = n % 1000;
@@ -17,26 +29,29 @@ pub fn exe(power: usize) -> usize {
                 v[l] = n;
             }
         }
-        //      println!("ループ:{}", i);
-        //    v.iter().rev().clone().fold((), |_, s| print!("{}", s));
-        //  println!("");
+        // println!("ループ:{}", i);
+        // v.iter().rev().clone().fold((), |_, s| print!(" {}", s));
+        // println!("");
     }
     return div_arrange(v, 1).iter().sum();
 }
 
-fn div_arrange(v: Vec<usize>, power: usize) -> Vec<usize> {
+fn div_arrange(mut v: Vec<usize>, power: usize) -> Vec<usize> {
     let digits: usize = 10.pow(power as u32);
-    let mut new_vec = vec![0;v.len()];
-    for (i, &n) in v.iter().enumerate() {
+    for i in 0..v.len() {
+        let n = v[i];
         if digits <= n {
-            //            println!("次の値を{},{}と{}へ", n, (i + power), i);
-            new_vec[i + power] += n / digits;
-            new_vec[i] += n % digits;
+            v[i + power] += n / digits;
+            v[i] = n % digits;
         } else {
-            new_vec[i] += n;
+            v[i] = n;
         }
+
     }
-    new_vec
+    // println!("整地");
+    // v.iter().rev().clone().fold((), |_, s| print!(" {}", s));
+    // println!("");
+    v
 }
 
 fn max_digits(base: usize, power: usize) -> usize {

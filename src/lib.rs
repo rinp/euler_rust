@@ -7,8 +7,8 @@ extern crate test;
 extern crate rayon;
 extern crate num;
 extern crate time;
-// #[macro_use]
-// extern crate lazy_static;
+#[macro_use]
+extern crate lazy_static;
 
 pub mod answer;
 pub mod common;

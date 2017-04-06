@@ -18,7 +18,7 @@ pub fn exe(mut power: usize) -> usize {
     //    println!("最大桁数は:{}", max_digits);
     let mut v: Vec<usize> = vec![0; max_digits];
     v[0] = 1;
-    for i in 0..power {
+    for _ in 0..power {
         for l in (0..max_digits).rev() {
             // println!("{} * {}", v[l], base);
             let n = v[l] * base;

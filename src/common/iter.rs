@@ -1,11 +1,12 @@
-use std::collections::HashMap;
+use fnv::FnvHashMap;
 
 pub fn prime_iter() -> Box<Iterator<Item = u64>> {
+    let map = FnvHashMap::default();
     let from_two = (1u64..)
         .into_iter()
         .map(|x| if x % 2 == 0 { 3 * x + 1 } else { 3 * x + 2 })
         .filter(|x| x % 5 != 0)
-        .scan(HashMap::new(), |map, i| {
+        .scan(map, |map, i| {
 
             let (not_prime, base) =
                 map.remove(&i).map(|x| (true, x)).unwrap_or_else(|| (false, &i * 2));
@@ -20,7 +21,7 @@ pub fn prime_iter() -> Box<Iterator<Item = u64>> {
 
             map.insert(new_key, base);
 
-            if !not_prime && map.len() % 10000 == 0 {
+            if !not_prime && map.len() % 100000 == 0 {
                 println!("{:12} {:12}", i, new_key);
             }
 
@@ -199,6 +200,12 @@ mod tests {
     // test common::iter::tests::prime_iter_bench_1000                 ... bench:     835,137 ns/iter (+/- 38,032)
     // test common::iter::tests::prime_iter_bench_10000                ... bench:  11,715,948 ns/iter (+/- 1,706,147)
     // test common::iter::tests::prime_iter_bench_100000               ... bench: 160,553,689 ns/iter (+/- 23,185,862)
+
+    // test common::iter::tests::prime_iter_bench_10                   ... bench:         729 ns/iter (+/- 30)
+    // test common::iter::tests::prime_iter_bench_100                  ... bench:      15,126 ns/iter (+/- 625)
+    // test common::iter::tests::prime_iter_bench_1000                 ... bench:     440,900 ns/iter (+/- 29,122)
+    // test common::iter::tests::prime_iter_bench_10000                ... bench:   6,336,700 ns/iter (+/- 239,974)
+    // test common::iter::tests::prime_iter_bench_100000               ... bench:  87,273,489 ns/iter (+/- 14,784,276)
 
     #[bench]
     fn prime_iter_bench_10(b: &mut Bencher) {
